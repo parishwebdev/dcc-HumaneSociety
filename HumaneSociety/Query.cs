@@ -11,6 +11,7 @@ namespace HumaneSociety
         internal static Client GetClient(string userName, string password)
         {
             throw new NotImplementedException();
+
         }
 
         internal static object GetUserAdoptionStatus(Client client)
@@ -48,32 +49,44 @@ namespace HumaneSociety
             throw new NotImplementedException();
         }
 
-        internal static void UpdateUsername(Client client)
+        public static void UpdateUsername(Client client)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var clientData = db.Clients.Where(c => c.ID == client.ID).First();
+            clientData.userName = client.userName;
+            db.SubmitChanges();
         }
 
         public static void UpdateEmail(Client client)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            var clientData = from entry in db.Clients where entry.ID == client.ID select entry;
-            clientData.First().email = client.email;
+            var clientData = db.Clients.Where(c => c.ID == client.ID).First();
+            clientData.email = client.email;
             db.SubmitChanges();
         }
 
         internal static void UpdateAddress(Client client)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var clientData = db.Clients.Where(c => c.ID == client.ID).First();
+            clientData.userAddress = client.userAddress;
+            db.SubmitChanges();
         }
 
         internal static void UpdateFirstName(Client client)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var clientData = db.Clients.Where(c => c.ID == client.ID).First();
+            clientData.firstName = client.firstName;
+            db.SubmitChanges();
         }
 
         internal static void UpdateLastName(Client client)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var clientData = db.Clients.Where(c => c.ID == client.ID).First();
+            clientData.lastName = client.lastName;
+            db.SubmitChanges();
         }
 
         internal static void RunEmployeeQueries(Employee employee, string v)
