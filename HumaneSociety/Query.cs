@@ -53,9 +53,12 @@ namespace HumaneSociety
             throw new NotImplementedException();
         }
 
-        internal static void UpdateEmail(Client client)
+        public static void UpdateEmail(Client client)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var clientData = from entry in db.Clients where entry.ID == client.ID select entry;
+            clientData.First().email = client.email;
+            db.SubmitChanges();
         }
 
         internal static void UpdateAddress(Client client)
