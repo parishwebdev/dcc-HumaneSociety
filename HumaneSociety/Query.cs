@@ -39,6 +39,7 @@ namespace HumaneSociety
 
             clientJunctionData.approvalStatus = "pending";
             animalData.adoptionStatus = "pending";
+            db.SubmitChanges();
         }
         public static object RetrieveClients()
         {
@@ -52,10 +53,12 @@ namespace HumaneSociety
             var stateData = db.USStates;
             return stateData;
         }
+
         public static void AddNewClient(string firstName, string lastName, string username, string password, string email, string streetAddress, int zipCode, int state)
         {
             throw new NotImplementedException();
         }
+
         internal static void UpdateClient(Client client)
         {
             throw new NotImplementedException();
@@ -102,17 +105,31 @@ namespace HumaneSociety
 
         internal static void RunEmployeeQueries(Employee employee, string v)
         {
-            throw new NotImplementedException();
         }
 
-        internal static object GetPendingAdoptions()
+        public static object GetPendingAdoptions()
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var pendingAdoptions = db.Animals.Where(pa => pa.adoptionStatus == "pending");
+            return pendingAdoptions;
         }
 
-        internal static void UpdateAdoption(bool v, ClientAnimalJunction clientAnimalJunction)
+        public static void UpdateAdoption(bool v, ClientAnimalJunction clientAnimalJunction)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var animalAdopted = db.Animals.Where(c => c.ID == clientAnimalJunction.animal).First();
+            if (v == true)
+            {
+                animalAdopted.adoptionStatus = "adopted";
+                clientAnimalJunction.approvalStatus = "adopted";
+            }
+            else if (v == false)
+            {
+                clientAnimalJunction.approvalStatus = "not adopted";
+                animalAdopted.adoptionStatus = "not adopted";
+            }
+            db.SubmitChanges();
+
         }
 
         internal static object GetShots(Animal animal)
