@@ -28,19 +28,31 @@ namespace HumaneSociety
             var animalData = db.Animals.Where(c => c.ID == iD).First();
             return animalData;
         }
-        internal static void Adopt(object animal, Client client)
+        public static void Adopt(object animal, Client client)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+
+            var animalData = db.Animals.Where(a => a == animal).First();
+            var clientData = db.Clients.Where(c => c.ID == client.ID).First();
+
+            var clientJunctionData = db.ClientAnimalJunctions.Where(c => c.client == clientData.ID).Where(cj => cj.animal == animalData.ID).First();
+
+            clientJunctionData.approvalStatus = "pending";
+            animalData.adoptionStatus = "pending";
         }
-        internal static object RetrieveClients()
+        public static object RetrieveClients()
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var clientData = db.Clients;
+            return clientData;
         }
-        internal static object GetStates()
+        public static object GetStates()
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var stateData = db.USStates;
+            return stateData;
         }
-        internal static void AddNewClient(string firstName, string lastName, string username, string password, string email, string streetAddress, int zipCode, int state)
+        public static void AddNewClient(string firstName, string lastName, string username, string password, string email, string streetAddress, int zipCode, int state)
         {
             throw new NotImplementedException();
         }
