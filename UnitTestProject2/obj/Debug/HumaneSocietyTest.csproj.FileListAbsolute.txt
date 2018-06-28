@@ -1,0 +1,2 @@
+C:\Users\Matthew_2\source\repos\DCC\HumaneSocietyStarter\UnitTestProject2\obj\Debug\HumaneSocietyTest.csprojResolveAssemblyReference.cache
+C:\Users\Matthew_2\source\repos\DCC\HumaneSocietyStarter\UnitTestProject2\obj\Debug\HumaneSocietyTest.csproj.CoreCompileInputs.cache
