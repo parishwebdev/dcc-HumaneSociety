@@ -8,6 +8,7 @@ namespace HumaneSociety
 {
     public static class Query
     {
+        private delegate void EmployeeCrud(Employee _employee);
         public static Client GetClient(string userName, string password)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
@@ -121,9 +122,28 @@ namespace HumaneSociety
             db.SubmitChanges();
         }
 
-        internal static void RunEmployeeQueries(Employee employee, string v)
+
+
+        public static void RunEmployeeQueries(Employee employee, string v)
         {
+            
         }
+        public static void CreateEmployee(Employee employee)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Employee newEmployee = employee;
+            db.Employees.InsertOnSubmit(newEmployee);
+            db.SubmitChanges();
+        }
+        public static void UpdateEmployee(Employee employee)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var updatedEmployee = db.Employees.Where(c => employee.employeeNumber == c.employeeNumber).First();
+            updatedEmployee = employee;
+            db.SubmitChanges();
+            //Need to only change first/last/
+        }
+
 
         public static IQueryable<ClientAnimalJunction> GetPendingAdoptions()
         {
