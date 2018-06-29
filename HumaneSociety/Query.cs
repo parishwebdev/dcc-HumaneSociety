@@ -41,22 +41,38 @@ namespace HumaneSociety
             animalData.adoptionStatus = "pending";
             db.SubmitChanges();
         }
-        public static object RetrieveClients()
+        public static IQueryable<Client> RetrieveClients()
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            var clientData = db.Clients;
+            var clientData = from c in db.Clients select c;
             return clientData;
         }
-        public static object GetStates()
+        public static IQueryable<USState> GetStates()
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            var stateData = db.USStates;
+            var stateData = from us in db.USStates select us;
             return stateData;
         }
 
         public static void AddNewClient(string firstName, string lastName, string username, string password, string email, string streetAddress, int zipCode, int state)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Client newClient = new Client();
+
+            newClient.firstName = firstName;
+            newClient.lastName = lastName;
+            newClient.userName = username;
+            newClient.pass = password;
+            newClient.email = email;
+            var addressJunction = db.UserAddresses.Where(c => c.ID == newClient.ID).First();
+            addressJunction.addessLine1 = streetAddress;
+            addressJunction.zipcode = zipCode;
+            addressJunction.USStates = state;
+            newClient.userAddress = addressJunction.ID;
+
+            db.Clients.InsertOnSubmit(newClient);
+            db.SubmitChanges();
+           
         }
 
         internal static void UpdateClient(Client client)
