@@ -14,15 +14,14 @@ namespace HumaneSociety
             var clientData = db.Clients.Where(c => c.userName == userName).Where(c => c.pass == password).First();
             return clientData;
         }
-        public static object GetUserAdoptionStatus(Client client)
+        public static IQueryable<ClientAnimalJunction> GetUserAdoptionStatus(Client client)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
             var clientData = db.Clients.Where(c => c.ID == client.ID).First();
-            var junctionData = db.ClientAnimalJunctions.Where(c => client.ID == clientData.ID).First();
-            var adoptionStatus = junctionData.approvalStatus;
-            return adoptionStatus;
+            var junctionData = db.ClientAnimalJunctions.Where(c => client.ID == clientData.ID); 
+            return junctionData;
         }
-        public static object GetAnimalByID(int iD)
+        public static Animal GetAnimalByID(int iD)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
             var animalData = db.Animals.Where(c => c.ID == iD).First();
@@ -75,9 +74,12 @@ namespace HumaneSociety
            
         }
 
-        internal static void UpdateClient(Client client)
+        public static void UpdateClient(Client client)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var clientData = db.Clients.Where(c => c.ID == client.ID).First();
+            clientData = client;
+            db.SubmitChanges();
         }
         public static void UpdateUsername(Client client)
         {
@@ -123,10 +125,10 @@ namespace HumaneSociety
         {
         }
 
-        public static object GetPendingAdoptions()
+        public static IQueryable<ClientAnimalJunction> GetPendingAdoptions()
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            var pendingAdoptions = db.Animals.Where(pa => pa.adoptionStatus == "pending");
+            var pendingAdoptions = db.ClientAnimalJunctions.Where(pa => pa.approvalStatus == "pending");
             return pendingAdoptions;
         }
 
