@@ -8,6 +8,7 @@ namespace HumaneSociety
 {
     public static class Query
     {
+        //test//
         private delegate void EmployeeCrud(Employee _employee);
         public static Client GetClient(string userName, string password)
         {
