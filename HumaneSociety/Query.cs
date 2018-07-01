@@ -8,7 +8,6 @@ namespace HumaneSociety
 {
     public static class Query
     {
-        //test//
         private delegate void EmployeeCrud(Employee _employee);
         public static Client GetClient(string userName, string password)
         {
@@ -127,7 +126,29 @@ namespace HumaneSociety
 
         public static void RunEmployeeQueries(Employee employee, string v)
         {
-            
+            EmployeeCrud create = CreateEmployee;
+            EmployeeCrud read = ReadEmployee;
+            EmployeeCrud update = UpdateEmployee;
+            EmployeeCrud delete = DeleteEmployee;
+            switch (v)
+            {
+                case "create":
+                    create(employee);
+                    break;
+                case "read":
+                    read(employee);
+                    break;
+                case "update":
+                    update(employee);
+                    break;
+                case "delete":
+                    delete(employee);
+                    break;
+                default:
+                    throw new Exception();
+
+            }
+
         }
         public static void CreateEmployee(Employee employee)
         {
@@ -136,15 +157,38 @@ namespace HumaneSociety
             db.Employees.InsertOnSubmit(newEmployee);
             db.SubmitChanges();
         }
+        public static void ReadEmployee(Employee employee)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var readEmployee = db.Employees.Where(c => employee.employeeNumber == c.employeeNumber).First();
+            List<string> employeeInfoList = new List<string>();
+            employeeInfoList.Add(readEmployee.employeeNumber.ToString());
+            employeeInfoList.Add(readEmployee.firsttName);
+            employeeInfoList.Add(readEmployee.lastName);
+            employeeInfoList.Add(readEmployee.userName);
+            employeeInfoList.Add(readEmployee.employeeNumber.ToString());
+            employeeInfoList.Add(readEmployee.email);
+            UserInterface.DisplayUserOptions(employeeInfoList);
+
+        }
         public static void UpdateEmployee(Employee employee)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
             var updatedEmployee = db.Employees.Where(c => employee.employeeNumber == c.employeeNumber).First();
-            updatedEmployee = employee;
+            updatedEmployee.firsttName = employee.firsttName;
+            updatedEmployee.lastName = employee.lastName;
+            updatedEmployee.employeeNumber = employee.employeeNumber;
+            updatedEmployee.email = employee.email;
             db.SubmitChanges();
-            //Need to only change first/last/
-        }
 
+        }
+        public static void DeleteEmployee(Employee employee)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var deletedEmployee = db.Employees.Where(c => c.employeeNumber == employee.employeeNumber).First();
+            db.Employees.DeleteOnSubmit(deletedEmployee);
+            db.SubmitChanges();
+        }
 
         public static IQueryable<ClientAnimalJunction> GetPendingAdoptions()
         {
@@ -171,24 +215,139 @@ namespace HumaneSociety
 
         }
 
-        internal static object GetShots(Animal animal)
+        internal static IQueryable<AnimalShotJunction> GetShots(Animal animal)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var shotData = db.AnimalShotJunctions.Where(c => c.Animal_ID == animal.ID);
+            return shotData;
         }
 
         internal static void UpdateShot(string v, Animal animal)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Animal animalUpdating = db.Animals.Where(c => c.ID == animal.ID).First();
+            Shot shotUpdating = db.Shots.Where(c => c.name == v).First();
+            AnimalShotJunction animalShotJunction = db.AnimalShotJunctions.Where(c => c.Animal_ID == animalUpdating.ID).Where(c => c.Shot_ID == shotUpdating.ID).First();
+            animalShotJunction.dateRecieved = DateTime.Now;
         }
 
-        internal static void EnterUpdate(Animal animal, Dictionary<int, string> updates)
+        public static void EnterUpdate(Animal animal, Dictionary<int, string> updates)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < updates.Count; i++)
+            {
+                var item = updates.ElementAt(i);
+                switch (item.Key)
+                {
+                    case 1:
+                        UpdateCategory(animal, item.Value);
+                        break;
+                    case 2:
+                        UpdateBreed(animal, item.Value);
+                        break;
+                    case 3:
+                        UpdateAnimalName(animal, item.Value);
+                        break;
+                    case 4:
+                        UpdateAnimalAge(animal, item.Value);
+                        break;
+                    case 5:
+                        UpdateDemeanor(animal, item.Value);
+                        break;
+                    case 6:
+                        UpdateKidFriendly(animal, item.Value);
+                        break;
+                    case 7:
+                        UpdatePetFriendly(animal, item.Value);
+                        break;
+                    case 8:
+                        UpdatePetWeight(animal, item.Value);
+                        break;
+                }
+            }
+        }
+
+        private static void UpdateCategory(Animal animal, string newValue)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Animal animalUpdating = db.Animals.Where(c => c.ID == animal.ID).First();
+            var breed = db.Breeds.Where(c => c.ID == animalUpdating.breed).First();
+            var category = db.Catagories.Where(c => c.ID == breed.catagory).First();
+            category.catagory1 = newValue;
+            breed.catagory = category.ID;
+        }
+
+        private static void UpdateBreed(Animal animal, string newValue)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Animal animalUpdating = db.Animals.Where(c => c.ID == animal.ID).First();
+            Breed newBreed = db.Breeds.Where(c => c.breed1 == newValue).First();
+            animalUpdating.breed = newBreed.ID;
+        }
+
+        private static void UpdateAnimalName(Animal animal, string newValue)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Animal animalUpdating = db.Animals.Where(c => c.ID == animal.ID).First();
+            animalUpdating.name = newValue;
+        }
+
+        private static void UpdateAnimalAge(Animal animal, string newValue)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Animal animalUpdating = db.Animals.Where(c => c.ID == animal.ID).First();
+            try
+            {
+                animalUpdating.age = Convert.ToInt32(newValue);
+            }
+            catch (NotFiniteNumberException)
+            {
+                UserInterface.DisplayUserOptions("Age entered was not a number.");
+            }
+        }
+
+        private static void UpdateDemeanor(Animal animal, string newValue)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Animal animalUpdating = db.Animals.Where(c => c.ID == animal.ID).First();
+            animalUpdating.demeanor = newValue;
+        }
+
+        private static void UpdateKidFriendly(Animal animal, string newValue)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Animal animalUpdating = db.Animals.Where(c => c.ID == animal.ID).First();
+            bool kidFriendlyUpdate = Boolean.TryParse(newValue, out kidFriendlyUpdate);
+            animalUpdating.kidFriendly = kidFriendlyUpdate;
+        }
+
+        private static void UpdatePetFriendly(Animal animal, string newValue)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Animal animalUpdating = db.Animals.Where(c => c.ID == animal.ID).First();
+            bool petFriendlyUpdate = Boolean.TryParse(newValue, out petFriendlyUpdate);
+            animalUpdating.petFriendly = petFriendlyUpdate;
+        }
+
+        private static void UpdatePetWeight(Animal animal, string newValue)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Animal animalUpdating = db.Animals.Where(c => c.ID == animal.ID).First();
+            try
+            {
+                animalUpdating.weight = Convert.ToInt32(newValue);
+            }
+            catch (NotFiniteNumberException)
+            {
+                UserInterface.DisplayUserOptions("Weight entered was not a number.");
+            }
         }
 
         internal static void RemoveAnimal(Animal animal)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var deletedAnimal = db.Animals.Where(c => c.ID == animal.ID).First();
+            db.Animals.DeleteOnSubmit(deletedAnimal);
+            db.SubmitChanges();
         }
 
         internal static int? GetBreed()
@@ -216,19 +375,36 @@ namespace HumaneSociety
             throw new NotImplementedException();
         }
 
-        internal static Employee RetrieveEmployeeUser(string email, int employeeNumber)
+        public static Employee RetrieveEmployeeUser(string email, int employeeNumber)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Employee employee = db.Employees.Where(c => c.employeeNumber == employeeNumber).Where(c => c.email == email).First();
+            return employee;
         }
 
-        internal static void AddUsernameAndPassword(Employee employee)
+        public static void AddUsernameAndPassword(Employee employee)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Employee currentEmployee = db.Employees.Where(c => c.ID == employee.ID).First();
+            currentEmployee.userName = employee.userName;
+            currentEmployee.pass = employee.pass;
+
         }
 
-        internal static bool CheckEmployeeUserNameExist(string username)
+        public static bool CheckEmployeeUserNameExist(string username)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            bool userNameExists;
+            if (db.Employees.Any(c => c.userName == username))
+            {
+                userNameExists = true;
+            }
+            else
+            {
+                userNameExists = false;
+            }
+
+            return userNameExists;
         }
     }
 }
