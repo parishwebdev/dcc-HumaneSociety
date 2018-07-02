@@ -11,8 +11,11 @@ namespace HumaneSociety
     {
         static void Main(string[] args)
         {
-            PointOfEntry.Run();
             
+
+            CSVImporter.ConvertCSVtoDataTable("..../animals.csv");
+
+            // PointOfEntry.Run();
             Console.ReadLine();
         }
     }

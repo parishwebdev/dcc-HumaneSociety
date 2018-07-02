@@ -25,7 +25,7 @@ namespace HumaneSociety
             switch (input.ToLower())
             {
                 case "reset":
-                    PointOfEntry.Run();
+                   /* PointOfEntry.Run();*/
                     Environment.Exit(1);
                     break;
                 case "exit":

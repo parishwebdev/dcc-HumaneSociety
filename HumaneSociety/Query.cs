@@ -170,62 +170,62 @@ namespace HumaneSociety
 
         }
 
-        internal static object GetShots(Animal animal)
+        public static object GetShots(Animal animal)
         {
             throw new NotImplementedException();
         }
 
-        internal static void UpdateShot(string v, Animal animal)
+        public static void UpdateShot(string v, Animal animal)
         {
             throw new NotImplementedException();
         }
 
-        internal static void EnterUpdate(Animal animal, Dictionary<int, string> updates)
+        public static void EnterUpdate(Animal animal, Dictionary<int, string> updates)
         {
             throw new NotImplementedException();
         }
 
-        internal static void RemoveAnimal(Animal animal)
+        public static void RemoveAnimal(Animal animal)
         {
             throw new NotImplementedException();
         }
 
-        internal static int? GetBreed()
+        public static int? GetBreed()
         {
             throw new NotImplementedException();
         }
 
-        internal static int? GetDiet()
+        public static int? GetDiet()
         {
             throw new NotImplementedException();
         }
 
-        internal static int? GetLocation()
+        public static int? GetLocation()
         {
             throw new NotImplementedException();
         }
 
-        internal static void AddAnimal(Animal animal)
+        public static void AddAnimal(Animal animal)
         {
             throw new NotImplementedException();
         }
 
-        internal static Employee EmployeeLogin(string userName, string password)
+        public static Employee EmployeeLogin(string userName, string password)
         {
             throw new NotImplementedException();
         }
 
-        internal static Employee RetrieveEmployeeUser(string email, int employeeNumber)
+        public static Employee RetrieveEmployeeUser(string email, int employeeNumber)
         {
             throw new NotImplementedException();
         }
 
-        internal static void AddUsernameAndPassword(Employee employee)
+        public static void AddUsernameAndPassword(Employee employee)
         {
             throw new NotImplementedException();
         }
 
-        internal static bool CheckEmployeeUserNameExist(string username)
+        public static bool CheckEmployeeUserNameExist(string username)
         {
             throw new NotImplementedException();
         }

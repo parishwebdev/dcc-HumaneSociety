@@ -22,3 +22,6 @@ C:\Users\Matthew_2\source\repos\DCC\HumaneSocietyStarter\HumaneSociety\obj\Debug
 C:\Users\Matthew_2\source\repos\DCC\HumaneSocietyStarter\HumaneSociety\obj\Debug\HumaneSociety.csproj.CoreCompileInputs.cache
 C:\Users\Matthew_2\source\repos\DCC\HumaneSocietyStarter\HumaneSociety\obj\Debug\HumaneSociety.exe
 C:\Users\Matthew_2\source\repos\DCC\HumaneSocietyStarter\HumaneSociety\obj\Debug\HumaneSociety.pdb
+C:\Users\Matthew_2\source\repos\DCC\HumaneSocietyStarter\HumaneSociety\bin\Debug\HumaneSociety.exe.config
+C:\Users\Matthew_2\source\repos\DCC\HumaneSocietyStarter\HumaneSociety\bin\Debug\HumaneSociety.exe
+C:\Users\Matthew_2\source\repos\DCC\HumaneSocietyStarter\HumaneSociety\bin\Debug\HumaneSociety.pdb
