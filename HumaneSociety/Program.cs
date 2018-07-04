@@ -11,6 +11,7 @@ namespace HumaneSociety
     {
         static void Main(string[] args)
         {
+            PopulateDB pop = new PopulateDB();
             PointOfEntry.Run();
             
             Console.ReadLine();
