@@ -417,7 +417,9 @@ namespace HumaneSociety
 
         internal static Employee EmployeeLogin(string userName, string password)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var employee = db.Employees.Where(c => c.userName == userName).Where(c => c.pass == password).First();
+            return employee;
         }
 
         public static Employee RetrieveEmployeeUser(string email, int employeeNumber)
