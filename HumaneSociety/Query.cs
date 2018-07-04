@@ -274,6 +274,7 @@ namespace HumaneSociety
             var category = db.Catagories.Where(c => c.ID == breed.catagory).First();
             category.catagory1 = newValue;
             breed.catagory = category.ID;
+            db.SubmitChanges();
         }
 
         private static void UpdateBreed(Animal animal, string newValue)
@@ -282,6 +283,7 @@ namespace HumaneSociety
             Animal animalUpdating = db.Animals.Where(c => c.ID == animal.ID).First();
             Breed newBreed = db.Breeds.Where(c => c.breed1 == newValue).First();
             animalUpdating.breed = newBreed.ID;
+            db.SubmitChanges();
         }
 
         private static void UpdateAnimalName(Animal animal, string newValue)
@@ -289,20 +291,15 @@ namespace HumaneSociety
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
             Animal animalUpdating = db.Animals.Where(c => c.ID == animal.ID).First();
             animalUpdating.name = newValue;
+            db.SubmitChanges();
         }
 
         private static void UpdateAnimalAge(Animal animal, string newValue)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
             Animal animalUpdating = db.Animals.Where(c => c.ID == animal.ID).First();
-            try
-            {
-                animalUpdating.age = Convert.ToInt32(newValue);
-            }
-            catch (NotFiniteNumberException)
-            {
-                UserInterface.DisplayUserOptions("Age entered was not a number.");
-            }
+            animalUpdating.age = Convert.ToInt32(newValue);
+            db.SubmitChanges();
         }
 
         private static void UpdateDemeanor(Animal animal, string newValue)
@@ -310,6 +307,7 @@ namespace HumaneSociety
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
             Animal animalUpdating = db.Animals.Where(c => c.ID == animal.ID).First();
             animalUpdating.demeanor = newValue;
+            db.SubmitChanges();
         }
 
         private static void UpdateKidFriendly(Animal animal, string newValue)
@@ -318,6 +316,7 @@ namespace HumaneSociety
             Animal animalUpdating = db.Animals.Where(c => c.ID == animal.ID).First();
             bool kidFriendlyUpdate = Boolean.TryParse(newValue, out kidFriendlyUpdate);
             animalUpdating.kidFriendly = kidFriendlyUpdate;
+            db.SubmitChanges();
         }
 
         private static void UpdatePetFriendly(Animal animal, string newValue)
@@ -326,20 +325,16 @@ namespace HumaneSociety
             Animal animalUpdating = db.Animals.Where(c => c.ID == animal.ID).First();
             bool petFriendlyUpdate = Boolean.TryParse(newValue, out petFriendlyUpdate);
             animalUpdating.petFriendly = petFriendlyUpdate;
+            db.SubmitChanges();
         }
 
         private static void UpdatePetWeight(Animal animal, string newValue)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
             Animal animalUpdating = db.Animals.Where(c => c.ID == animal.ID).First();
-            try
-            {
-                animalUpdating.weight = Convert.ToInt32(newValue);
-            }
-            catch (NotFiniteNumberException)
-            {
-                UserInterface.DisplayUserOptions("Weight entered was not a number.");
-            }
+            animalUpdating.weight = Convert.ToInt32(newValue);
+            UserInterface.DisplayUserOptions("Weight entered was not a number.");
+            db.SubmitChanges();
         }
 
         internal static void RemoveAnimal(Animal animal)
@@ -350,24 +345,74 @@ namespace HumaneSociety
             db.SubmitChanges();
         }
 
-        internal static int? GetBreed()
+        internal static int? GetBreed(string breedName)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            int? breedID;
+            if (db.Breeds.Any(c => c.breed1 == breedName))
+            {
+                var breedType = db.Breeds.Where(d => d.breed1 == breedName).First();
+                breedID = breedType.ID;
+            }
+            else
+            {
+                AddNewBreed(breedName);
+                breedID = GetBreed(breedName);
+            }
+            return breedID;
         }
 
-        internal static int? GetDiet()
+        private static void AddNewBreed(string breedName)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Breed newBreed = new Breed();
+            newBreed.breed1 = breedName;
+            newBreed.pattern = UserInterface.GetStringData("pattern", "the animal's");
+            db.Breeds.InsertOnSubmit(newBreed);
+            db.SubmitChanges();
         }
 
-        internal static int? GetLocation()
+        internal static int? GetDiet(string foodType, int foodAmount)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            int? dietId;
+            if (db.DietPlans.Any(c => c.food == foodType) && db.DietPlans.Any(d => d.amount == foodAmount))
+            {
+                var dietPlan = db.DietPlans.Where(c => c.food == foodType).Where(c => c.amount == foodAmount).First();
+                dietId = dietPlan.ID;
+            }
+            else
+            {
+                AddNewDiet(foodType, foodAmount);
+                dietId = GetDiet(foodType, foodAmount);
+            }
+            return dietId;
+
+        }
+
+        private static void AddNewDiet(string foodType, int foodAmount)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            DietPlan newDietPlan = new DietPlan();
+            newDietPlan.food = foodType;
+            newDietPlan.amount = foodAmount;
+            db.DietPlans.InsertOnSubmit(newDietPlan);
+            db.SubmitChanges();
+        }
+
+        internal static int? GetLocation(string roomName)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Room selectedRoom = db.Rooms.Where(c => c.name == roomName).First();
+            int? roomID = selectedRoom.ID;
+            return roomID;
         }
 
         internal static void AddAnimal(Animal animal)
         {
-            throw new NotImplementedException();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            db.Animals.InsertOnSubmit(animal);
+            db.SubmitChanges();
         }
 
         internal static Employee EmployeeLogin(string userName, string password)
