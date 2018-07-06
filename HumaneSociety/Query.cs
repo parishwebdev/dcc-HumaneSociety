@@ -54,22 +54,27 @@ namespace HumaneSociety
             return stateData;
         }
 
-        public static void AddNewClient(string firstName, string lastName, string username, string password, string email, string streetAddress, int zipCode, int state)
+        public static void AddNewClient(string inputFirstName, string inputLastName, string username, string password, string email, string streetAddress, int zipCode, int state)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            Client newClient = new Client();
+            UserAddress newUserAddress = new UserAddress()
+            {
+                addessLine1 = streetAddress,
+                zipcode = zipCode,
+                USStates = state,
+            };
+            Client newClient = new Client()
+            {
+                firstName = inputFirstName,
+                lastName = inputLastName,
+                userName = username,
+                pass = password,
+                email = email,
+                userAddress = newUserAddress.ID
 
-            newClient.firstName = firstName;
-            newClient.lastName = lastName;
-            newClient.userName = username;
-            newClient.pass = password;
-            newClient.email = email;
-            var addressJunction = db.UserAddresses.Where(c => c.ID == newClient.ID).First();
-            addressJunction.addessLine1 = streetAddress;
-            addressJunction.zipcode = zipCode;
-            addressJunction.USStates = state;
-            newClient.userAddress = addressJunction.ID;
-
+        };
+         
+            
             db.Clients.InsertOnSubmit(newClient);
             db.SubmitChanges();
            
