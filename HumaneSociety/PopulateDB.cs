@@ -22,6 +22,7 @@ namespace HumaneSociety
         public PopulateDB()
         {
             db.Employees.InsertOnSubmit(steveEmployee);
+            db.SubmitChanges();
 
         }
     }
