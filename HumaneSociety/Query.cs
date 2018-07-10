@@ -63,6 +63,8 @@ namespace HumaneSociety
                 zipcode = zipCode,
                 USStates = state,
             };
+            db.UserAddresses.InsertOnSubmit(newUserAddress);
+            db.SubmitChanges();
             Client newClient = new Client()
             {
                 firstName = inputFirstName,
@@ -71,13 +73,9 @@ namespace HumaneSociety
                 pass = password,
                 email = email,
                 userAddress = newUserAddress.ID
-
         };
-         
-            
             db.Clients.InsertOnSubmit(newClient);
-            db.SubmitChanges();
-           
+            db.SubmitChanges(); 
         }
 
         public static void UpdateClient(Client client)
