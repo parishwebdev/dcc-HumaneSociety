@@ -11,6 +11,8 @@ namespace HumaneSociety
     {
         static void Main(string[] args)
         {
+            //PopulateDB pop = new PopulateDB();
+            //CSVImporter.CSVImportToDestinationTable("animals.csv", "Animal");
             PointOfEntry.Run();
             
             Console.ReadLine();
